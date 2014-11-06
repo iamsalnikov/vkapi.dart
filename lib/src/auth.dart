@@ -5,8 +5,8 @@ part of vkapi;
  */
 class Auth {
 
-  static final UrlAccessToken = "https://oauth.vk.com/access_token?client_id=%s&client_secret=%s&code=%s&redirect_uri=%s";
-  static final AuthorizeUrl = "https://oauth.vk.com/authorize?%s";
+  static final AccessTokenUrl = new Uri.https("oauth.vk.com", "/access_token");
+  static final AuthorizeUrl = new Uri.https("oauth.vk.com", "/authorize");
 
   Map _options = {};
 
@@ -55,6 +55,10 @@ class Auth {
 
   dynamic getOption(String optionName) {
     return _options[optionName];
+  }
+
+  Uri getUrl() {
+    return AuthorizeUrl.replace(queryParameters: _options);
   }
 
 }
