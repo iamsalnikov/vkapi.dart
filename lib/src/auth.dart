@@ -57,7 +57,7 @@ class Auth {
     return _options[optionName];
   }
 
-  Uri getUrl() {
+  Uri get url {
     return AuthorizeUrl.replace(queryParameters: _options);
   }
 
