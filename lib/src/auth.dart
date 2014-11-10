@@ -41,12 +41,8 @@ class Auth {
     _options['redirect_uri'] = redirectUri;
   }
 
-  Set get scope {
-    return _options['scope'];
-  }
-
-  void set scope(Set scope) {
-    _options['scope'] = scope;
+  void set scope(List scope) {
+    _options['scope'] = scope.join(",");
   }
 
   void set version(String version) {
