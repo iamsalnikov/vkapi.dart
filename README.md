@@ -28,3 +28,22 @@
 
 После этого мы можем получить ссылку, на которую нужно направить пользователя с помощью
 геттера `url`.
+
+Пример получения ссылки, на которую нужно направить пользователя:
+
+```dart
+import "package:vkapi/vkapi.dart";
+
+void main() {
+
+  Auth auth = new Auth.standalone();
+  auth..appId = "APP_ID"
+      ..redirectUri = "https://oauth.vk.com/blank.html"
+      ..version = "5.27"
+      ..scopes = [Scope.Friends, Scope.Photos, Scope.Audio];
+
+  // Выведем ссылку на консоль
+  print(auth.url);
+
+}
+```
