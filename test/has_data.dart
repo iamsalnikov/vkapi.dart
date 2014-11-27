@@ -1,5 +1,5 @@
 part of testing;
 
 void hasData() {
-  return expect("1", "2");
+  return expect("1", "1");
 }
