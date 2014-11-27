@@ -8,8 +8,7 @@ abstract class BaseQuery {
   String _accessToken = '';
   String _methodName = '';
 
-  http.Response originalResponse = null;
-  String data = '';
+  QueryResponse response = null;
 
   /**
    * Get query uri for api request
@@ -25,8 +24,9 @@ abstract class BaseQuery {
 
   Future<Map> get() {
     return http.get(queryUri).then((http.Response res) {
-      originalResponse = res;
-      return new Future.value(JSON.decode(res.body));
+      response = new QueryResponse.fromResponse(res);
+
+      return new Future.value(response);
     });
   }
 
