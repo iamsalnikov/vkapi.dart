@@ -1,6 +1,6 @@
 part of vkapi;
 
-class Scopes {
+class Scope {
 
   static final Notify = "notify";
   static final Friends = "friends";
