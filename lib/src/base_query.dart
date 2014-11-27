@@ -23,9 +23,10 @@ abstract class BaseQuery {
     return new Uri.https('api.vk.com', path, _params);
   }
 
-  Future get() {
+  Future<Map> get() {
     return http.get(queryUri).then((http.Response res) {
-      print(res.body);
+      originalResponse = res;
+      return new Future.value(JSON.decode(res.body));
     });
   }
 
