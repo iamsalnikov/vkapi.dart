@@ -11,5 +11,5 @@ part 'src/base_query.dart';
 part 'src/query.dart';
 part 'src/query_response.dart';
 
-part 'src/scope.dart';
-part 'src/display.dart';
+part 'src/helpers/scope.dart';
+part 'src/helpers/display.dart';
