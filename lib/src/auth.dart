@@ -134,4 +134,30 @@ class Auth {
     return m.group(1);
   }
 
+  /**
+   * Get error from url
+   */
+  String getError(String url) {
+    Uri uri = Uri.parse(url);
+
+    if (uri.queryParameters.containsKey('error')) {
+      return uri.queryParameters['error'];
+    }
+
+    return "";
+  }
+
+  /**
+   * Get error description from url
+   */
+  String getErrorDescription(String url) {
+    Uri uri = Uri.parse(url);
+
+    if (uri.queryParameters.containsKey('error_description')) {
+      return uri.queryParameters['error_description'];
+    }
+
+    return "";
+  }
+
 }
