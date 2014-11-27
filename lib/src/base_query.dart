@@ -14,12 +14,14 @@ abstract class BaseQuery {
    * Get query uri for api request
    */
   Uri get queryUri {
-    var params = _params;
+    Map params = _params;
     params['access_token'] = _accessToken;
+
+    params = _normalizeParams(params);
 
     var path = '/method/' + _methodName;
 
-    return new Uri.https('api.vk.com', path, _params);
+    return new Uri.https('api.vk.com', path, params);
   }
 
   Future<QueryResponse> get() {
@@ -32,6 +34,22 @@ abstract class BaseQuery {
 
   String toString() {
     return queryUri.toString();
+  }
+
+  /**
+   * Normalize params
+   *
+   * In this method we just convert lists to string
+   */
+  Map _normalizeParams(params) {
+    params.forEach((key, value) {
+      if (value is List) {
+        value = value.join(',');
+      }
+      params[key] = value;
+    });
+
+    return params;
   }
 
 }
