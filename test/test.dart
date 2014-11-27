@@ -7,9 +7,14 @@ import "package:vkapi/vkapi.dart";
 
 part "get_token.dart";
 part "has_data.dart";
+part "has_error.dart";
 
 main() {
 
-  test("Has data", hasData);
+  group("Access token test", () {
+    test("Has data", hasData);
+    test("Has error", hasError);
+  });
+
 
 }
