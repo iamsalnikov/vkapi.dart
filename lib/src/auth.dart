@@ -8,6 +8,7 @@ class Auth {
   static final AccessTokenUrl = new Uri.https("oauth.vk.com", "/access_token");
   static final AuthorizeUrl = new Uri.https("oauth.vk.com", "/authorize");
   static final AccessTokenRegExp = new RegExp(r'access_token=([\w\d]+)');
+  static final UserIdRegExp = new RegExp(r'user_id=(\d+)');
 
   Map _options = {};
 
@@ -98,6 +99,19 @@ class Auth {
    */
   String _extractAccessToken(String url) {
     var m = AccessTokenRegExp.firstMatch(url);
+
+    if (m == null) {
+      return "";
+    }
+
+    return m.group(1);
+  }
+
+  /**
+   * Extract user id
+   */
+  String getUserId(String url) {
+    var m = UserIdRegExp.firstMatch(url);
 
     if (m == null) {
       return "";
