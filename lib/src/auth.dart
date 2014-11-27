@@ -7,6 +7,7 @@ class Auth {
 
   static final AccessTokenUrl = new Uri.https("oauth.vk.com", "/access_token");
   static final AuthorizeUrl = new Uri.https("oauth.vk.com", "/authorize");
+  static final AccessTokenRegExp = new RegExp(r'access_token=([\w\d]+)');
 
   Map _options = {};
 
@@ -80,16 +81,29 @@ class Auth {
     return AccessTokenUrl.replace(queryParameters: params);
   }
 
-  String getToken(code) {
+  String getToken({code: "", url: ""}) {
 
-    this.code = code;
+    if (url.length > 0) {
+      return _extractAccessToken(url);
+    }
 
-    http.get(accessUrl).then((http.Response res) {
-      print(res);
-    });
+    // Process by code
 
     return "";
 
+  }
+
+  /**
+   * Extract access token
+   */
+  String _extractAccessToken(String url) {
+    var m = AccessTokenRegExp.firstMatch(url);
+
+    if (m == null) {
+      return "";
+    }
+
+    return m.group(1);
   }
 
 }
