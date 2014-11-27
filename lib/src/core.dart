@@ -7,6 +7,17 @@ class Core {
   String _lang = '';
   String _version = '';
   String _token = '';
+  bool _testMode = false;
+
+  set testMode(bool value) {
+    _testMode = value;
+
+    if (_testMode) {
+      setParam('test_mode', 1);
+    } else if (_params.containsKey('test_mode')) {
+      _params.remove('test_mode');
+    }
+  }
 
   /**
    * Set one param
@@ -46,7 +57,10 @@ class Core {
     setParam('lang', _lang);
     setParam('v', _version);
 
+    if (_testMode) {
+      setParam('test_mode', 1);
+    }
+
     return this;
   }
-
 }
