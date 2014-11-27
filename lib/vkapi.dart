@@ -13,3 +13,4 @@ part 'src/query_response.dart';
 
 part 'src/helpers/scope.dart';
 part 'src/helpers/display.dart';
+part 'src/helpers/user_field.dart';
