@@ -12,18 +12,6 @@ abstract class BaseQuery {
   String data = '';
 
   /**
-   * Constructor
-   */
-  BaseQuery(method, token, [params]) {
-    _methodName = method;
-    _accessToken = token;
-
-    if (params is Map) {
-      _params = params;
-    }
-  }
-
-  /**
    * Get query uri for api request
    */
   Uri get queryUri {
@@ -37,8 +25,12 @@ abstract class BaseQuery {
 
   Future get() {
     return http.get(queryUri).then((http.Response res) {
-      print(res);
+      print(res.body);
     });
+  }
+
+  String toString() {
+    return queryUri.toString();
   }
 
 }

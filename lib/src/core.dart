@@ -13,7 +13,7 @@ class Core {
     _testMode = value;
 
     if (_testMode) {
-      setParam('test_mode', 1);
+      _setParam('test_mode', '1');
     } else if (_params.containsKey('test_mode')) {
       _params.remove('test_mode');
     }
@@ -22,11 +22,7 @@ class Core {
   /**
    * Set one param
    */
-  Core setParam(key, value, [defaultValue = false]) {
-    if ( (value == null || value.length == 0) && defaultValue != false ) {
-      value = defaultValue;
-    }
-
+  Core _setParam(key, value) {
     _params[key] = value;
 
     return this;
@@ -36,29 +32,33 @@ class Core {
 
   set lang(String value) {
     _lang = value;
-    setParam('lang', value);
-  }
-
-  Core setParams(Map params) {
-    params.forEach((key, value) {
-      setParam(key, value);
-    });
-
-    return this;
+    _setParam('lang', value);
   }
 
   set apiVersion(String value) {
     _version = value;
-    setParam('v', value);
+    _setParam('v', value);
+  }
+
+  Query query(method, [params]) {
+
+    if (!(params is Map)) {
+      params = {};
+    }
+
+    params.addAll(_params);
+
+    return new Query(method, _token, params);
+
   }
 
   Core reset() {
     _params = {};
-    setParam('lang', _lang);
-    setParam('v', _version);
+    _setParam('lang', _lang);
+    _setParam('v', _version);
 
     if (_testMode) {
-      setParam('test_mode', 1);
+      _setParam('test_mode', '1');
     }
 
     return this;
