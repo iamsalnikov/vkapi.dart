@@ -22,7 +22,7 @@ abstract class BaseQuery {
     return new Uri.https('api.vk.com', path, _params);
   }
 
-  Future<Map> get() {
+  Future<QueryResponse> get() {
     return http.get(queryUri).then((http.Response res) {
       response = new QueryResponse.fromResponse(res);
 
