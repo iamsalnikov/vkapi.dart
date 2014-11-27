@@ -11,11 +11,11 @@ hasError() {
       'name_case': NameCase.Gen
   }).get().then((QueryResponse res) {
 
-    expect(res.hasError, true);
-    expect(res.data == null, true);
-    expect(res.errorCode != 0, true);
-    expect(res.errorMessage.length > 0, true);
-    expect(res.requestParams.length > 0, true);
+    expect(res.hasError, isTrue);
+    expect(res.data, isNull);
+    expect(res.errorCode, greaterThan(0));
+    expect(res.errorMessage, isNot(isEmpty));
+    expect(res.requestParams, isNot(isEmpty));
 
   });
 }

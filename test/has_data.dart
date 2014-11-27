@@ -10,7 +10,7 @@ hasData() {
       'fields': [UserField.PhotoMaxOrig, UserField.About, UserField.Status],
       'name_case': NameCase.Gen
   }).get().then((QueryResponse res) {
-    expect(res.hasError, false);
-    expect(res.data != null, true);
+    expect(res.hasError, isFalse);
+    expect(res.data, isNotNull);
   });
 }
