@@ -5,7 +5,7 @@ import "dart:convert";
 
 import "package:http/http.dart" as http;
 
-part 'src/core.dart';
+part 'src/vk_api.dart';
 part 'src/auth.dart';
 part 'src/base_query.dart';
 part 'src/query.dart';

@@ -1,6 +1,6 @@
 part of vkapi;
 
-class Core {
+class VkApi {
 
   Map _params = {};
 
@@ -22,7 +22,7 @@ class Core {
   /**
    * Set one param
    */
-  Core _setParam(key, value) {
+  VkApi _setParam(key, value) {
     _params[key] = value;
 
     return this;
@@ -52,7 +52,7 @@ class Core {
 
   }
 
-  Core reset() {
+  VkApi reset() {
     _params = {};
     _setParam('lang', _lang);
     _setParam('v', _version);
