@@ -26,8 +26,7 @@
 `display`     | Внешний вид окна авторизации. Для простоты можно воспользоваться константами класса `Display`. Пример: `Display.Mobile`. Это необязательный параметр |
 `version`     | Версия Api, которую используем   |
 
-После этого мы можем получить ссылку, на которую нужно направить пользователя с помощью
-геттера `url`.
+После этого мы можем получить ссылку, на которую нужно направить пользователя с помощью геттера `url`.
 
 Пример получения ссылки, на которую нужно направить пользователя:
 
@@ -46,4 +45,38 @@ void main() {
   print(auth.url);
 
 }
+```
+
+После получения ссылки мы должны направить по ней пользователя, чтобы он подтвердил или отказался от
+выдачи прав приложению. После того, как пользователь сделает свой выбор мы должны будем получить url,
+на который он будет перенаправлен. После получения url мы можем извлечь из него токен, время его жизни,
+id пользователя, а если произошла ошибка - то ошибку и ее описание.
+
+Пример получения информации из url:
+
+```dart
+
+import "package:vkapi/vkapi.dart";
+
+void main() {
+
+  Auth auth = new Auth.standalone();
+
+  var url = "https://oauth.vk.com/blank.html#access_token=accesstoken&expires_in=86400&user_id=1";
+  var errorUrl = "http://oauth.vk.com?error=access_denied&error_description=The+user+or+authorization+server+denied+the+request.";
+
+  // Получим токен
+  print(auth.getToken(url: url));
+  // Получим ID пользователя
+  print(auth.getUserId(url));
+  // Получим время жизни токена
+  print(auth.getExpiresIn(url));
+
+  // Получим ошибку
+  print(auth.getError(errorUrl));
+  // Получим описание ошибки
+  print(auth.getErrorDescription(errorUrl));
+
+}
+
 ```
