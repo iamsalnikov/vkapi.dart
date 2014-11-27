@@ -1,5 +1,6 @@
 library vkapi;
 
+import "dart:async";
 import "package:http/http.dart" as http;
 
 part 'src/core.dart';
