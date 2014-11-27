@@ -9,6 +9,7 @@ class Auth {
   static final AuthorizeUrl = new Uri.https("oauth.vk.com", "/authorize");
   static final AccessTokenRegExp = new RegExp(r'access_token=([\w\d]+)');
   static final UserIdRegExp = new RegExp(r'user_id=(\d+)');
+  static final ExpiresInRegExp = new RegExp(r'expires_in=(\d+)');
 
   Map _options = {};
 
@@ -112,6 +113,19 @@ class Auth {
    */
   String getUserId(String url) {
     var m = UserIdRegExp.firstMatch(url);
+
+    if (m == null) {
+      return "";
+    }
+
+    return m.group(1);
+  }
+
+  /**
+   * Extract expires in
+   */
+  String getExpiresIn(String url) {
+    var m = ExpiresInRegExp.firstMatch(url);
 
     if (m == null) {
       return "";
