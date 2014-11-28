@@ -170,23 +170,6 @@ print(auth.getErrorDescription(errorUrl));
 После того, как получен токен, можно выполнять запросы к API vk.com. Для этого нужно создать экземлпяр класса `VkApi`
 и установить его свойство `token` в значение, равное значению токена.
 
-Пример:
-
-```dart
-import "package:vkapi/vkapi.dart";
-
-void main() {
-
-  Auth auth = new Auth.standalone();
-
-  var url = "https://oauth.vk.com/blank.html#access_token=accesstoken&expires_in=86400&user_id=1";
-
-  VkApi vk = new VkApi();
-  vk.token = auth.getToken(url: url);
-
-}
-```
-
 Но токен - это не все, что можно указать у объекта класса `VkApi`. Вот полный список его свойств, которые
 можно установить:
 
