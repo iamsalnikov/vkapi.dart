@@ -84,9 +84,9 @@ class Auth {
     return AccessTokenUrl.replace(queryParameters: params);
   }
 
-  String getToken({code: "", url: ""}) {
+  String getToken(url) {
 
-    if (url.length > 0) {
+    if (_type == 'standalone' && url.length > 0) {
       return _extractAccessToken(url);
     }
 
