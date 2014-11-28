@@ -18,7 +18,7 @@
 ### Клиентская авторизация
 
 На первом шаге клиентской авторизации мы должны создать объект класса `StandaloneAuth`, c помощью конструктора
-`StandaloneAuth()`. Затем указать ID приложения, redirect uri, набор scopes, версию api.
+`StandaloneAuth()`. Затем указать ID приложения, redirect uri (для `standalone` это обычно `https://oauth.vk.com/blank.html`), набор scopes, версию api.
 Полный список параметров, которые можно установить для получения токена:
 
 Параметр      | Описание
@@ -28,6 +28,11 @@
 `scopes`      | Список прав, которые необходимы приложению. Для простоты можно воспользоваться константами класса `Scope`. Пример: `[Scope.Friends, Scope.Photos, Scope.Audio]` |
 `display`     | Внешний вид окна авторизации. Для простоты можно воспользоваться константами класса `Display`. Пример: `Display.Mobile`. Это необязательный параметр |
 `version`     | Версия Api, которую используем   |
+`secret`      | Секретный ключ приложения        |
+
+> **Примечание:**
+>
+> `redirectUri` в классе `StandaloneAuth` по-умолчанию установлен в `https://oauth.vk.com/blank.html`
 
 После этого мы можем получить ссылку, на которую нужно направить пользователя с помощью геттера `authUri`.
 
@@ -40,7 +45,6 @@ void main() {
 
   var auth = new StandaloneAuth();
   auth..appId = "APP_ID"
-      ..redirectUri = "https://oauth.vk.com/blank.html"
       ..version = "5.27"
       ..scopes = [Scope.Friends, Scope.Photos, Scope.Audio];
 
@@ -89,7 +93,77 @@ void main() {
 После решения пользователя по выдаче прав приложению получить текущий url webview (который сменится) и извлечь из него
 токен, либо информацию об ошибке.
 
+### Серверная авторизация
 
+На первом шаге клиентской авторизации мы должны создать объект класса `ServerAuth`, c помощью конструктора
+`ServerAuth()`. Затем указать ID приложения, redirect uri, набор scopes, версию api.
+Полный список параметров, которые можно установить для получения токена точно такой же, как и для класса
+`StandaloneAuth`, который описан в разделе **Клиентская авторизация**.
+
+Пример получения ссылки, на по которой нужно направить пользователя при серверной авторизации:
+
+```dart
+var auth = new ServerAuth();
+auth..appId = "APP_ID"
+    ..redirectUri = "http://redirect.uri/"
+    ..version = "5.27"
+    ..scopes = [Scope.Friends, Scope.Photos, Scope.Email, Scope.Audio];
+print(auth.authUri);
+```
+
+После того, как пользователь прошел по ссылке и принял/отклонил запрос на выдачу прав приложению мы можем
+попытаться получить токен, либо обработать ошибки.
+
+Вот список методов, с помощью которых мы можем это сделать:
+
+Метод                             | Описание
+----------------------------------|------------------------------------------------------------------------------------------|
+`getToken(url)`                   | получение токена по url, на который после выдачи прав был перенаправлен пользователь. Возвращает `Future<String>`, значением которого будет токен |
+`getUserId(url)`                  | получение id пользователя по url. Возвращает `Future<String>`, значением которого будет ID пользователя |
+`getExpiresIn(url)`               | получение времени жизни токена |
+`getEmail(url)`                   | если были запрошены права на получение email, то вернет `Future<String>`, значением которого будет email |
+`getError(url)`                   | получаем ошибку по url. Эту ошибку мы возьмем из параметров URL |
+`getErrorDescription(url)`        | получаем описание ошибки по url. Эту ошибку мы возьмем из параметров URL |
+`getServerError(url)`             | получаем ошибку, которая приходит в ответ на попытку получить токен. Возвращает `Future<String>` с текстом ошибки |
+`getServerErrorDescription(url)`  | получаем описание ошибки, которая приходит в ответ на попытку получить токен. Возвращает `Future<String> с описанием ошибки |
+
+*Заметьте*, что перед тем, как попытаться получить токен, нужно указать секретный ключ приложения через сеттер `secret`.
+
+Пример получения токена:
+
+```dart
+ServerAuth auth = new ServerAuth();
+auth..appId = "APP_ID"
+    ..secret = 'APP_SECRET'
+    ..redirectUri = "http://redirect.uri/"
+    ..version = "5.27"
+    ..scopes = [Scope.Friends, Scope.Photos, Scope.Email, Scope.Audio];
+
+var url = "http://redirect.uri/?code=hardcode";
+var errorUrl = "http://redirect.uri/?error=access_denied&error_reason=user_denied&error_description=User+denied+your+request";
+
+var list = [
+    auth.getToken(url),
+    auth.getUserId(url),
+    auth.getExpiresIn(url),
+    auth.getEmail(url),
+    auth.getServerError(url),
+    auth.getServerErrorDescription(url)
+];
+Future.wait(list).then((List values) {
+  print(values);
+});
+
+print(auth.getError(errorUrl));
+print(auth.getErrorDescription(errorUrl));
+```
+
+#### Пример последовательности действий для получения токена с помощью серверной авторизации
+
+1. Создаем объект `ServerAuth`, указываем значения для нужных полей и отправляем пользователя по полученной ссылке
+2. После того, как пользователь был снова перенаправлен на наш сайт, получаем url и передаем его необходимым методам:
+`getToken()`, `getUserId()`, `getExpiresIn()`, `getEmail()`, `getServerError()`, `getServerErrorDescription()`,
+`getError()`, `getErrorDescription()`.
 
 ## Выполнение запросов к API
 
