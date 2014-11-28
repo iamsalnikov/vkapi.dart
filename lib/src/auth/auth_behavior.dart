@@ -10,4 +10,8 @@ abstract class AuthBehavior {
 
   Uri get authUri;
 
+  String getError(String url);
+
+  String getErrorDescription(String url);
+
 }
