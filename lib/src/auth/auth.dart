@@ -55,7 +55,10 @@ abstract class Auth {
   }
 
   Uri get authUri {
-    return AuthorizeUrl.replace(queryParameters: _options);
+    var options = _options;
+    options.remove('client_secret');
+
+    return AuthorizeUrl.replace(queryParameters: options);
   }
 
   Uri get accessUrl {
