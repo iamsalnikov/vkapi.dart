@@ -13,13 +13,6 @@ class Auth {
 
   Map _options = {};
 
-  /**
-   * Constructor
-   */
-  Auth() {
-    _options['response_type'] = 'code';
-  }
-
   Auth.standalone() {
     _options['response_type'] = 'token';
   }
