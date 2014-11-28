@@ -223,15 +223,19 @@ void main() {
 import "package:vkapi/vkapi.dart";
 
 void main() {
-  Auth auth = new Auth.standalone();
+  StandaloneAuth auth = new StandaloneAuth();
 
   var url = "https://oauth.vk.com/blank.html#access_token=accesstoken&expires_in=86400&user_id=1";
 
-  VkApi vk = new VkApi();
-  vk.token = auth.getToken(url: url);
 
-  Query q = vk.query('users.get', {'user_ids': [1, 2, 3]});
-  q.get().then(processResponse);
+  auth.getToken(url).then((token) {
+    VkApi vk = new VkApi();
+    vk.token = token;
+
+    Query q = vk.query('users.get', {'user_ids': [1, 2, 3]});
+    q.get().then(processResponse);
+  });
+
 }
 
 void processResponse(QueryResponse data) {
