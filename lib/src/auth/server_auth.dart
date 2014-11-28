@@ -47,7 +47,6 @@ class ServerAuth extends Auth implements AuthBehavior {
 
   Future _getServerFuture(url) {
     if (_serverFuture != null) {
-      print("use current future");
       return _serverFuture;
     }
 
@@ -55,7 +54,7 @@ class ServerAuth extends Auth implements AuthBehavior {
     if (!uri.queryParameters.containsKey('code')) {
       return new Future.value(null);
     }
-    print("create new future");
+
     this.code = uri.queryParameters['code'];
     _serverFuture = http.get(accessUrl);
 
