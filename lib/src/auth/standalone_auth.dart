@@ -8,6 +8,7 @@ class StandaloneAuth extends Auth implements AuthBehavior {
 
   StandaloneAuth() {
     _options['response_type'] = 'token';
+    redirectUri = 'https://oauth.vk.com/blank.html';
   }
 
   Future<String> getToken(url) {
