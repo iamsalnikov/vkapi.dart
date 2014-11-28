@@ -33,6 +33,18 @@ class ServerAuth extends Auth implements AuthBehavior {
     });
   }
 
+  Future<String> getServerError(String url) {
+    return _getServerAnswer(url).then((answer) {
+      return new Future.value(answer['error']);
+    });
+  }
+
+  Future<String> getServerErrorDescription(String url) {
+    return _getServerAnswer(url).then((answer) {
+      return new Future.value(answer['error_description']);
+    });
+  }
+
   Future _getServerFuture(url) {
     if (_serverFuture != null) {
       print("use current future");
