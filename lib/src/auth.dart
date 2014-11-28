@@ -13,8 +13,16 @@ class Auth {
 
   Map _options = {};
 
+  String _type = '';
+
   Auth.standalone() {
     _options['response_type'] = 'token';
+    _type = 'standalone';
+  }
+
+  Auth.server() {
+    _options['response_type'] = 'code';
+    _type = 'server';
   }
 
   String get appId {
