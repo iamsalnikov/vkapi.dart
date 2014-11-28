@@ -11,20 +11,13 @@ class StandaloneAuth extends Auth implements AuthBehavior {
   }
 
   Future<String> getToken(url) {
-    return new Future.value(_getStandaloneToken(url));
-  }
-
-  /**
-   * Extract access token
-   */
-  String _getStandaloneToken(String url) {
     var m = AccessTokenRegExp.firstMatch(url);
 
     if (m == null) {
-      return "";
+      return new Future.value("");
     }
 
-    return m.group(1);
+    return new Future.value(m.group(1));
   }
 
   /**
