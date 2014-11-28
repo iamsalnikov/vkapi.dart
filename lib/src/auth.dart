@@ -3,7 +3,7 @@ part of vkapi;
 /**
  * Provide vk app authentication
  */
-class Auth {
+abstract class Auth {
 
   static final AccessTokenUrl = new Uri.https("oauth.vk.com", "/access_token");
   static final AuthorizeUrl = new Uri.https("oauth.vk.com", "/authorize");
@@ -18,12 +18,12 @@ class Auth {
   Future _serverFuture = null;
   Map _serverAnswer = {};
 
-  Auth.standalone() {
+  factory Auth.standalone() {
     _options['response_type'] = 'token';
     _type = 'standalone';
   }
 
-  Auth.server() {
+  factory Auth.server() {
     _options['response_type'] = 'code';
     _type = 'server';
   }
