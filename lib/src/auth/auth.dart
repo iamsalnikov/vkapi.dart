@@ -7,9 +7,6 @@ abstract class Auth {
 
   static final AccessTokenUrl = new Uri.https("oauth.vk.com", "/access_token");
   static final AuthorizeUrl = new Uri.https("oauth.vk.com", "/authorize");
-  static final AccessTokenRegExp = new RegExp(r'access_token=([\w\d]+)');
-  static final UserIdRegExp = new RegExp(r'user_id=(\d+)');
-  static final ExpiresInRegExp = new RegExp(r'expires_in=(\d+)');
 
   Map _options = {};
 
@@ -116,45 +113,6 @@ abstract class Auth {
     _serverFuture = http.get(accessUrl);
 
     return _serverFuture;
-  }
-
-  /**
-   * Extract access token
-   */
-  String _getStandaloneToken(String url) {
-    var m = AccessTokenRegExp.firstMatch(url);
-
-    if (m == null) {
-      return "";
-    }
-
-    return m.group(1);
-  }
-
-  /**
-   * Extract user id
-   */
-  Future<String> getUserId(String url) {
-    var m = UserIdRegExp.firstMatch(url);
-
-    if (m == null) {
-      return new Future.value("");
-    }
-
-    return new Future.value(m.group(1));
-  }
-
-  /**
-   * Extract expires in
-   */
-  Future<String> getExpiresIn(String url) {
-    var m = ExpiresInRegExp.firstMatch(url);
-
-    if (m == null) {
-      return new Future.value("");
-    }
-
-    return new Future.value(m.group(1));
   }
 
   /**
