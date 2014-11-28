@@ -18,16 +18,6 @@ abstract class Auth {
   Future _serverFuture = null;
   Map _serverAnswer = {};
 
-  factory Auth.standalone() {
-    _options['response_type'] = 'token';
-    _type = 'standalone';
-  }
-
-  factory Auth.server() {
-    _options['response_type'] = 'code';
-    _type = 'server';
-  }
-
   String get appId {
     return _options['client_id'];
   }
@@ -72,7 +62,7 @@ abstract class Auth {
     return _options[optionName];
   }
 
-  Uri get url {
+  Uri get authUri {
     return AuthorizeUrl.replace(queryParameters: _options);
   }
 

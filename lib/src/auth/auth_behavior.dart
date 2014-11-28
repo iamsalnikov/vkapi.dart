@@ -8,4 +8,6 @@ abstract class AuthBehavior {
 
   Future<String> getExpiresIn(String url);
 
+  Uri get authUri;
+
 }
