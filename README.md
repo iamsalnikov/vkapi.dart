@@ -8,14 +8,17 @@
 ## Получение токена для работы с API
 
 Для того, чтобы работать с API vk.com нам необходимо иметь токен (но он необходим не для всех
-методов). Сейчас реализован только один способ авторизации приложения -
-[клиентская авторизация](https://vk.com/dev/auth_mobile), которая подходит для
+методов). Сейчас реализовано два способа авторизации приложения:
+
+1. [клиентская авторизация](https://vk.com/dev/auth_mobile) - подходит для
 [Standalone-приложений](https://vk.com/dev/standalone).
+2. [серверная авторизация](https://vk.com/dev/auth_sites) - подходиит для подключения
+сайтов и сторонних мобильных платформ.
 
 ### Клиентская авторизация
 
-На первом шаге клиентской авторизации мы должны создать объект класса `Auth`, c помощью конструктора
-`Auth.standalone()`. Затем указать ID приложения, redirect uri, набор scopes, версию api.
+На первом шаге клиентской авторизации мы должны создать объект класса `StandaloneAuth`, c помощью конструктора
+`StandaloneAuth()`. Затем указать ID приложения, redirect uri, набор scopes, версию api.
 Полный список параметров, которые можно установить для получения токена:
 
 Параметр      | Описание
@@ -26,7 +29,7 @@
 `display`     | Внешний вид окна авторизации. Для простоты можно воспользоваться константами класса `Display`. Пример: `Display.Mobile`. Это необязательный параметр |
 `version`     | Версия Api, которую используем   |
 
-После этого мы можем получить ссылку, на которую нужно направить пользователя с помощью геттера `url`.
+После этого мы можем получить ссылку, на которую нужно направить пользователя с помощью геттера `authUri`.
 
 Пример получения ссылки, на которую нужно направить пользователя:
 
@@ -35,14 +38,14 @@ import "package:vkapi/vkapi.dart";
 
 void main() {
 
-  Auth auth = new Auth.standalone();
+  var auth = new StandaloneAuth();
   auth..appId = "APP_ID"
       ..redirectUri = "https://oauth.vk.com/blank.html"
       ..version = "5.27"
       ..scopes = [Scope.Friends, Scope.Photos, Scope.Audio];
 
   // Выведем ссылку на консоль
-  print(auth.url);
+  print(auth.authUri);
 
 }
 ```
@@ -59,17 +62,16 @@ import "package:vkapi/vkapi.dart";
 
 void main() {
 
-  Auth auth = new Auth.standalone();
+  var auth = new StandaloneAuth();
 
   var url = "https://oauth.vk.com/blank.html#access_token=accesstoken&expires_in=86400&user_id=1";
   var errorUrl = "http://oauth.vk.com?error=access_denied&error_description=The+user+or+authorization+server+denied+the+request.";
 
-  // Получим токен
-  print(auth.getToken(url: url));
-  // Получим ID пользователя
-  print(auth.getUserId(url));
-  // Получим время жизни токена
-  print(auth.getExpiresIn(url));
+  var list = [auth.getToken(url), auth.getUserId(url), auth.getExpiresIn(url)];
+
+  Future.wait(list).then((List values) {
+    print(values);
+  });
 
   // Получим ошибку
   print(auth.getError(errorUrl));
@@ -79,11 +81,15 @@ void main() {
 }
 ```
 
+Методы `getToken()`, `getUserId()`, `getExpiresIn()` возвращают `Future<String>`.
+
 #### Пример того, как можно получить токен в Chrome Packaged App
 
 Для получения токена в Chrome Packaged App мы можем создать объект webview, у которого указать URL для получения прав.
 После решения пользователя по выдаче прав приложению получить текущий url webview (который сменится) и извлечь из него
 токен, либо информацию об ошибке.
+
+
 
 ## Выполнение запросов к API
 
