@@ -73,7 +73,6 @@ class ServerAuth extends Auth implements AuthBehavior {
       }
 
       var value = JSON.decode(response.body);
-      print(value);
       return new Future.value(value);
     });
 
