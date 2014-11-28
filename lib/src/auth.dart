@@ -15,6 +15,9 @@ class Auth {
 
   String _type = '';
 
+  Future _serverFuture = null;
+  Map _serverAnswer = {};
+
   Auth.standalone() {
     _options['response_type'] = 'token';
     _type = 'standalone';
@@ -84,22 +87,51 @@ class Auth {
     return AccessTokenUrl.replace(queryParameters: params);
   }
 
-  String getToken(url) {
-
-    if (_type == 'standalone' && url.length > 0) {
-      return _extractAccessToken(url);
+  Future<String> getToken(url) {
+    if (_type == 'standalone') {
+      return new Future.value(_getStandaloneToken(url));
     }
 
-    // TODO: Process by code
+    if (_type == 'server') {
+      return _getServerToken(url);
+    }
 
-    return "";
+    return new Future.value("");
+  }
 
+  Future<String> _getServerToken(url) {
+    return _getServerFuture(url).then((response) {
+      if (response == null) {
+        return new Future.value("");
+      }
+
+      _serverAnswer = JSON.decode(response.body);
+      print(_serverAnswer);
+      return new Future.value(_serverAnswer['access_token']);
+    });
+  }
+
+  Future _getServerFuture(url) {
+    if (_serverFuture != null) {
+      print("use current future");
+      return _serverFuture;
+    }
+
+    var uri = Uri.parse(url);
+    if (!uri.queryParameters.containsKey('code')) {
+      return new Future.value(null);
+    }
+    print("create new future");
+    this.code = uri.queryParameters['code'];
+    _serverFuture = http.get(accessUrl);
+
+    return _serverFuture;
   }
 
   /**
    * Extract access token
    */
-  String _extractAccessToken(String url) {
+  String _getStandaloneToken(String url) {
     var m = AccessTokenRegExp.firstMatch(url);
 
     if (m == null) {
@@ -112,27 +144,27 @@ class Auth {
   /**
    * Extract user id
    */
-  String getUserId(String url) {
+  Future<String> getUserId(String url) {
     var m = UserIdRegExp.firstMatch(url);
 
     if (m == null) {
-      return "";
+      return new Future.value("");
     }
 
-    return m.group(1);
+    return new Future.value(m.group(1));
   }
 
   /**
    * Extract expires in
    */
-  String getExpiresIn(String url) {
+  Future<String> getExpiresIn(String url) {
     var m = ExpiresInRegExp.firstMatch(url);
 
     if (m == null) {
-      return "";
+      return new Future.value("");
     }
 
-    return m.group(1);
+    return new Future.value(m.group(1));
   }
 
   /**
