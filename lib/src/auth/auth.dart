@@ -10,11 +10,6 @@ abstract class Auth {
 
   Map _options = {};
 
-  String _type = '';
-
-  Future _serverFuture = null;
-  Map _serverAnswer = {};
-
   String get appId {
     return _options['client_id'];
   }
@@ -72,47 +67,6 @@ abstract class Auth {
     };
 
     return AccessTokenUrl.replace(queryParameters: params);
-  }
-
-  Future<String> getToken(url) {
-    if (_type == 'standalone') {
-      return new Future.value(_getStandaloneToken(url));
-    }
-
-    if (_type == 'server') {
-      return _getServerToken(url);
-    }
-
-    return new Future.value("");
-  }
-
-  Future<String> _getServerToken(url) {
-    return _getServerFuture(url).then((response) {
-      if (response == null) {
-        return new Future.value("");
-      }
-
-      _serverAnswer = JSON.decode(response.body);
-      print(_serverAnswer);
-      return new Future.value(_serverAnswer['access_token']);
-    });
-  }
-
-  Future _getServerFuture(url) {
-    if (_serverFuture != null) {
-      print("use current future");
-      return _serverFuture;
-    }
-
-    var uri = Uri.parse(url);
-    if (!uri.queryParameters.containsKey('code')) {
-      return new Future.value(null);
-    }
-    print("create new future");
-    this.code = uri.queryParameters['code'];
-    _serverFuture = http.get(accessUrl);
-
-    return _serverFuture;
   }
 
   /**
