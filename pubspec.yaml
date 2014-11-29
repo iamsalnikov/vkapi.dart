@@ -1,5 +1,5 @@
 name: vkapi
-version: 0.0.2
+version: 0.0.3
 description: Vk.com api implementation on Dart
 author: Alexey Salnikov <me@iamsalnikov.ru>
 homepage: https://github.com/iamsalnikov/vkapi.dart
