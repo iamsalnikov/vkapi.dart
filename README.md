@@ -11,9 +11,11 @@
 методов). Сейчас реализовано два способа авторизации приложения:
 
 1. [клиентская авторизация](https://vk.com/dev/auth_mobile) - подходит для
-[Standalone-приложений](https://vk.com/dev/standalone).
+[Standalone-приложений](https://vk.com/dev/standalone);
 2. [серверная авторизация](https://vk.com/dev/auth_sites) - подходит для подключения
-сайтов и сторонних мобильных платформ.
+сайтов и сторонних мобильных платформ;
+3. [авторизация сервера приложения](https://vk.com/dev/auth_server) - для осуществления вызовов
+к административным методам API, начинающимся с префикса **secure**
 
 ### Клиентская авторизация
 
@@ -164,6 +166,28 @@ print(auth.getErrorDescription(errorUrl));
 2. После того, как пользователь был снова перенаправлен на наш сайт, получаем url и передаем его необходимым методам:
 `getToken()`, `getUserId()`, `getExpiresIn()`, `getEmail()`, `getServerError()`, `getServerErrorDescription()`,
 `getError()`, `getErrorDescription()`.
+
+### Авторизация сервера приложения
+
+Для выполнения авторизации сервера приложения нужно создать объект класса `ApplicationServerAuth`. После этого указать
+`appId`, `secret` и `version`. Затем мы сможем получить токен с помощью метода `getToken()`, который вернет `Future<String>`,
+значением которого будет токен. Пример получения токена для сервера приложения:
+
+```dart
+ApplicationServerAuth auth = new ApplicationServerAuth();
+auth..appId = "APP_IP"
+    ..secret = 'SECRET'
+    ..version = "5.27";
+
+var list = [
+  auth.getToken(),
+  auth.getExpiresIn()
+];
+
+Future.wait(list).then((List values) {
+    print(values);
+});
+```
 
 ## Выполнение запросов к API
 
