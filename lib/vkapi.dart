@@ -10,6 +10,7 @@ part 'src/vk_api.dart';
 part 'src/auth/auth_behavior.dart';
 part 'src/auth/standalone_auth.dart';
 part 'src/auth/server_auth.dart';
+part 'src/auth/application_server_auth.dart';
 part 'src/auth/auth.dart';
 
 part 'src/base_query.dart';
